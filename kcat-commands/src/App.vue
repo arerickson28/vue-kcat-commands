@@ -1,5 +1,7 @@
 <script setup>
+import Project from './components/Project.vue'
 import Topic from './components/Topic.vue'
+import { topicData } from "./data/TopicData.js"
 
 </script>
 
@@ -28,9 +30,11 @@ import Topic from './components/Topic.vue'
       <button style="margin:15px">Update</button>
     </div>
 
-
     <div>
-      <Topic />
+       <hr></hr>
+       <project v-for="project in topicData" :project-data = {project} :key="project.name"></project>
+       
+       <hr></hr>
     </div>
   </div>
 </template>

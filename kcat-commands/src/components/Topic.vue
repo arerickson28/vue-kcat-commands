@@ -1,16 +1,20 @@
 <script>
 export default {
-  data() {
-    return {
-      message: 'kcat -P -X security.protocol=ssl -X ssl.certificate.location=<changeMe> -X ssl.key.location=<changeMe> -X ssl.ca.location=<changeMe> -b awsomeStageServer:9092 -t my-awesome-topic'
-    }
+//   data() {
+//     return {
+//       message: 'kcat -P -X security.protocol=ssl -X ssl.certificate.location=<changeMe> -X ssl.key.location=<changeMe> -X ssl.ca.location=<changeMe> -b awsomeStageServer:9092 -t my-awesome-topic'
+//     }
+//   }
+props: ['topicData'],
+  created() {
+    console.log(this.topicData)
   }
 }
 
 </script>
 
 <template>
-    <p class="purple">{{ message }}</p>
+    <h3 class="purple">{{ topicData.topic.topicName }}</h3>
 </template>
 
 
