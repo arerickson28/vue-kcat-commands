@@ -18,6 +18,7 @@ export default {
     <div class="BodyDiv">
         <Topic v-for="topic in projectData.project.topics" :topic-data = {topic} :key="topic.topicName"></Topic>
     </div>
+    <hr></hr>
 
    
 
