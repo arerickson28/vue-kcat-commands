@@ -1,4 +1,4 @@
-<script>
+<!-- <script>
 export default {
   data() {
     return {
@@ -34,6 +34,7 @@ export default {
 <template>
      <div class="TealBox">
       <h3>Your SSL Location</h3>
+      <h2>yo</h2>
       <div>
         <input value="prod" name="env" type="radio" />
         <label>Prod</label>
@@ -101,4 +102,4 @@ export default {
   display: flex;
   justify-content: space-around;
 }
-</style>
+</style> -->

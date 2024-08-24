@@ -30,7 +30,7 @@ export default {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
-
+    flex-wrap: wrap;
 }
 
 </style>

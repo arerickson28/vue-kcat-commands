@@ -1,6 +1,6 @@
 <script setup>
 import Project from './components/Project.vue'
-import SslLoc from './components/SslLoc.vue'
+// import SslLoc from './components/SslLoc.vue'
 import { topicData } from "./data/TopicData.js"
 import store from "store"
 import { reactive } from 'vue'
@@ -33,6 +33,7 @@ const sslLoc = ref({
   let sslLocInfoState = ref(store.get("sslLoc"))
   function setSslLocInfoState(v) {
     sslLocInfoState.value = v
+    console.log("hey")
   }
 
   let sslEnvState = ref("stage")
@@ -114,7 +115,7 @@ function handleInput(e, sslType) {
 
         </div>
 
-        <button @click.stop="toggleUpdateSSL" style="margin:15px">Save to local storage</button>
+        <button @click.stop="() => {toggleUpdateSSL(); saveToLocalStorage()}" style="margin:15px">Save to local storage</button>
         <!-- onClick = {() => {
                         toggleUpdateSSL()
                         saveToLocalStorage()
