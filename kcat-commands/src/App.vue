@@ -4,7 +4,7 @@ import Topic from './components/Topic.vue'
 // import SslLoc from './components/SslLoc.vue'
 import { topicData, topicData1 } from "./data/TopicData.js"
 import store from "store"
-import { reactive } from 'vue'
+import { provide, reactive } from 'vue'
 import { ref } from 'vue'
 
 let showUpdateBtnState = ref(true)
@@ -32,6 +32,7 @@ const sslLoc = ref({
   setLocalStorageIfNull(sslLoc.value)
 
   let sslLocInfoState = ref(store.get("sslLoc"))
+  provide('sslLocInfoState', sslLocInfoState)
   function setSslLocInfoState(v) {
     sslLocInfoState.value = v
     console.log("hey")
@@ -66,6 +67,8 @@ function handleInput(e, sslType) {
   }
   console.log("heyy", sslType)
 }
+
+// return {sslLocInfoState}
 
 </script>
 

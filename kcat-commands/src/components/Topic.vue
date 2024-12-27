@@ -1,7 +1,7 @@
 <script>
+import { inject } from 'vue';
 import { topicData } from '@/data/TopicData';
 
-// import { topicData } from '@/data/TopicData';
 
 export default {
   props: [
@@ -10,6 +10,7 @@ export default {
 ],
   data() {
     return {
+      sslInfo: inject('sslLocInfoState'),
       topicName: this.topicData.topic.topicName,
       isDisplayedState: false,
       serverSelectionState: this.topicData.topic.stageServer,
@@ -17,12 +18,10 @@ export default {
       producerConsumerState: "C",
       kCatString: "",
       sslString: `kcat -C -b ${this.topicData.topic.stageServer} -t ${this.topicData.topic.topicName}`,
-      sslBaseString: "-X ssl.certificate.location=<changeMe> -X ssl.key.location=<changeMe> -X security.protocol=ssl -X ssl.ca.location=<changeMe> ",
     }
   },
   mounted() {
     this.setServerSelectionState(this.topicData.topic.stageServer)
-    // this.setProducerConsumerState("C")
     this.setKcatString();
   },
   created() {},
@@ -57,38 +56,31 @@ export default {
       // console.log(sslInfo)
     },
     setKcatString() {
+      let certificate = this.sslInfo[this.sslEnvState]["ssl_certificate_location"]
+      let key = this.sslInfo[this.sslEnvState]["ssl_key_location"]
+      let ca = this.sslInfo[this.sslEnvState]["ssl_ca_location"]
+      // if (this.sslEnvState == "prod") {
+      //   certificate = 
+      // }
+
+     
+
       let topicString = ` kcat -${this.producerConsumerState} -b ${this.serverSelectionState} -t ${this.topicName}`
-      this.kCatString = this.sslBaseString + topicString
+
+      let sslEnvString = `-X ssl.certificate.location=${certificate} -X ssl.key.location=${key} -X security.protocol=ssl -X ssl.ca.location=${ca} `
+      this.kCatString = sslEnvString + topicString
     },
-    // getSslString() {
-    //   // return "hey"
-    //   let env = this.sslEnvState
-    //   console.log(`woah: ${this.sslEnvState}`)
-    //   return `kcat -${this.producerConsumerState} -b ${this.serverSelectionState} -t ${this.topicData.topicName}`
-    //   // console.log(this.sslLocInfo)
-    //   // return this.sslInfo.sslLocInfo.sslLocInfoState["stage"].ssl_certificate_location
-    //   // return this.sslEnvState
-    // //  return  `-X security.protocol=ssl -X ssl.certificate.location=${this.sslInfo.sslLocInfo.sslLocInfoState[this.sslEnvState].ssl_certificate_location} -X ssl.key.location=${this.sslInfo.sslLocInfo.sslLocInfoState[this.sslEnvState].ssl_key_location} -X ssl.ca.location=${this.sslInfo.sslLocInfo.sslLocInfoState[this.sslEnvState].ssl_ca_location}`
-    // }
   }
 }
-
-//  const sslString = `-X security.protocol=ssl -X ssl.certificate.location=${sslLocInfo[sslEnvState].ssl_certificate_location} -X ssl.key.location=${sslLocInfo[sslEnvState].ssl_key_location} -X ssl.ca.location=${sslLocInfo[sslEnvState].ssl_ca_location}`
-//     const kafkaCmd = `kcat -${producerOrConsumer} ${sslString} -b ${serverSelectionState} -t ${topicData.topicName}`
 
 </script>
 
 <template>
     <div>
-        <div class="purple" @click=setIsDisplayedState(true)>
-         
+      <div class="purple" @click=setIsDisplayedState(true)>
         <h3>{{ this.topicName }}</h3>
         <div v-if="isDisplayedState">
           <div>
-            <!-- <input :checked="sslEnvState == 'prod'" v-bind:value="topicData.topic.prodServer"  v-bind:name=" topicData.topic.topicName +'-prodEnv'"  type="radio" @input="(e) => handleEnvSelection(e, 'prod')"/>
-            <label>Prod</label>
-            <input  :checked="sslEnvState == 'stage'" v-bind:value="topicData.topic.stageServer" v-bind:name=" topicData.topic.topicName +'-stageEnv'" type="radio" @input="(e) => handleEnvSelection(e, 'stage')"/>
-            <label>Stage</label> -->
             <input :checked="sslEnvState == 'prod'" v-bind:value="topicData.topic.prodServer"  v-bind:name=" topicData.topic.topicName +'-prodEnv'"  type="radio" @input="(e) => handleEnvSelection(e, 'prod')"/>
             <label>Prod</label>
             <input :checked="sslEnvState == 'stage'" v-bind:value="topicData.topic.stageServer" v-bind:name=" topicData.topic.topicName +'-stageEnv'" type="radio" @input="(e) => handleEnvSelection(e, 'stage')"/>
@@ -103,13 +95,12 @@ export default {
           </div>
           <hr/>
           <h3>{{ this.kCatString }}</h3>
+          <!-- <p>-X ssl.certificate.location=myStageLoc -X ssl.key.location=myStageKey -X security.protocol=ssl -X ssl.ca.location=mystageSaLoc kcat -C -b terrificStageServer:9092 -t my-terrific-topic</p> -->
         <br/>
             <button @click.stop="setIsDisplayedState(false)">Collapse</button>
         </div>
     </div>
     </div>
-   
-    
 </template>
 
 
@@ -131,6 +122,10 @@ h3 {
 }
 
 input {
+  margin: 15px;
+}
+
+button {
   margin: 15px;
 }
 </style>
