@@ -1,7 +1,8 @@
 <script setup>
 import Project from './components/Project.vue'
+import Topic from './components/Topic.vue'
 // import SslLoc from './components/SslLoc.vue'
-import { topicData } from "./data/TopicData.js"
+import { topicData, topicData1 } from "./data/TopicData.js"
 import store from "store"
 import { reactive } from 'vue'
 import { ref } from 'vue'
@@ -128,10 +129,17 @@ function handleInput(e, sslType) {
 
     </div>
 
-    <div>
+    <!-- <div>
       <hr>
       </hr>
-      <project v-for="project in topicData" :project-data={project} :key="project.name"></project>
+      <project v-for="project in topicData" :project-data={project} :ssl-loc-info={sslLocInfoState} :key="project.name"></project>
+      <hr>
+      </hr>
+    </div> -->
+    <div class="Topics">
+      <hr>
+      </hr>
+      <Topic v-for="topic in topicData1" :topic-data={topic} :ssl-loc-info={sslLocInfoState} :key="topic.topicName"></Topic>
       <hr>
       </hr>
     </div>
@@ -144,6 +152,14 @@ function handleInput(e, sslType) {
   flex-direction: column;
   justify-content: center;
   text-align: center;
+}
+
+.Topics {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
 }
 
 .TealBox {
