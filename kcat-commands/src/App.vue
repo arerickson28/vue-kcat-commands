@@ -1,11 +1,30 @@
 <script setup>
-import Project from './components/Project.vue'
 import Topic from './components/Topic.vue'
-// import SslLoc from './components/SslLoc.vue'
 import { topicData, topicData1 } from "./data/TopicData.js"
 import store from "store"
 import { provide, reactive } from 'vue'
 import { ref } from 'vue'
+
+function sortTopicsByTopicName(objects) {
+    const n = objects.length;
+    let swapped;
+
+    do {
+        swapped = false;
+        for (let i = 0; i < n - 1; i++) {
+            // Compare adjacent strings
+            if (objects[i]["topicName"] > objects[i + 1]["topicName"]) {
+                // Swap if out of order
+                [objects[i]["topicName"], objects[i + 1]["topicName"]] = [objects[i + 1]["topicName"], objects[i]["topicName"]];
+                swapped = true;
+            }
+        }
+    } while (swapped);
+
+    return objects;
+}
+
+const alphabatizedTopics = sortTopicsByTopicName(topicData1)
 
 let showUpdateBtnState = ref(true)
 let showGetNewSSlState = ref(false)
@@ -35,7 +54,6 @@ const sslLoc = ref({
   provide('sslLocInfoState', sslLocInfoState)
   function setSslLocInfoState(v) {
     sslLocInfoState.value = v
-    console.log("hey")
   }
 
   let sslEnvState = ref("stage")
@@ -65,10 +83,7 @@ function handleInput(e, sslType) {
 
   setSslLocInfoState(tempLocInfoState)
   }
-  console.log("heyy", sslType)
 }
-
-// return {sslLocInfoState}
 
 </script>
 
@@ -80,9 +95,8 @@ function handleInput(e, sslType) {
       </hr>
     </div>
 
-    <!-- <SslLoc></SslLoc> -->
     <div class="TealBox">
-      <h3>Your SSL Location</h3>
+      <h3>Set Your SSL Location</h3>
       <div>
         <input value="prod" name="env" type="radio" @input="(e) => setSslEnvState(e.target.value)"/>
         <label>Prod</label>
@@ -116,33 +130,17 @@ function handleInput(e, sslType) {
             <label>ssl.ca.location = </label>
             <input @input="(e) => handleInput(e, 'ssl_ca_location')" type="text" />
           </div>
-
         </div>
-
         <button @click.stop="() => {toggleUpdateSSL(); saveToLocalStorage()}" style="margin:15px">Save to local storage</button>
-        <!-- onClick = {() => {
-                        toggleUpdateSSL()
-                        saveToLocalStorage()
-                        } } -->
         <br></br>
         <button @click.stop="toggleUpdateSSL" style="margin:15px">Cancel</button>
-        <!-- onClick = {() => {toggleUpdateSSL()} } -->
-
       </div>
 
     </div>
-
-    <!-- <div>
-      <hr>
-      </hr>
-      <project v-for="project in topicData" :project-data={project} :ssl-loc-info={sslLocInfoState} :key="project.name"></project>
-      <hr>
-      </hr>
-    </div> -->
     <div class="Topics">
       <hr>
       </hr>
-      <Topic v-for="topic in topicData1" :topic-data={topic} :ssl-loc-info={sslLocInfoState} :key="topic.topicName"></Topic>
+      <Topic v-for="topic in alphabatizedTopics" :topic-data={topic} :ssl-loc-info={sslLocInfoState} :key="topic.topicName"></Topic>
       <hr>
       </hr>
     </div>

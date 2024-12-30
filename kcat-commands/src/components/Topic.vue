@@ -31,12 +31,9 @@ export default {
     },
     setServerSelectionState(string) {
       this.serverSelectionState = string
-      console.log(this.serverSelectionState)
     },
     setSslEnvState(string) {
       this.sslEnvState = string
-      // console.log(this.sslInfo.sslLocInfo.sslLocInfoState.stage.ssl_certificate_location)
-      console.log(this.sslEnvState)
     },
     setProducerConsumerState(string) {
       this.producerConsumerState = string
@@ -46,27 +43,17 @@ export default {
       this.setSslEnvState(env)
       console.log(this.sslString)
       this.setKcatString()
-      // this.getSslString()
     },
     handlePCSelection(e) {
       console.log(e.target.value)
       this.setProducerConsumerState(e.target.value)
       this.setKcatString()
-      // console.log(this.topicData)
-      // console.log(sslInfo)
     },
     setKcatString() {
       let certificate = this.sslInfo[this.sslEnvState]["ssl_certificate_location"]
       let key = this.sslInfo[this.sslEnvState]["ssl_key_location"]
       let ca = this.sslInfo[this.sslEnvState]["ssl_ca_location"]
-      // if (this.sslEnvState == "prod") {
-      //   certificate = 
-      // }
-
-     
-
       let topicString = ` kcat -${this.producerConsumerState} -b ${this.serverSelectionState} -t ${this.topicName}`
-
       let sslEnvString = `-X ssl.certificate.location=${certificate} -X ssl.key.location=${key} -X security.protocol=ssl -X ssl.ca.location=${ca} `
       this.kCatString = sslEnvString + topicString
     },
