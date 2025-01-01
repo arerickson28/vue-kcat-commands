@@ -53,9 +53,9 @@ export default {
       let certificate = this.sslInfo[this.sslEnvState]["ssl_certificate_location"]
       let key = this.sslInfo[this.sslEnvState]["ssl_key_location"]
       let ca = this.sslInfo[this.sslEnvState]["ssl_ca_location"]
-      let topicString = ` kcat -${this.producerConsumerState} -b ${this.serverSelectionState} -t ${this.topicName}`
+      let topicString = ` -b ${this.serverSelectionState} -t ${this.topicName} -${this.producerConsumerState}`
       let sslEnvString = `-X ssl.certificate.location=${certificate} -X ssl.key.location=${key} -X security.protocol=ssl -X ssl.ca.location=${ca} `
-      this.kCatString = sslEnvString + topicString
+      this.kCatString = `kcat ${sslEnvString} ${topicString}`
     },
   }
 }
