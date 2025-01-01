@@ -28,6 +28,10 @@ const alphabatizedTopics = sortTopicsByTopicName(topicData1)
 
 let showUpdateBtnState = ref(true)
 let showGetNewSSlState = ref(false)
+let showSSlBoxState = ref(false)
+function setShowSSlBoxState(bool) {
+  showSSlBoxState.value = bool
+}
 
 const sslLoc = ref({
     "stage": {
@@ -94,8 +98,10 @@ function handleInput(e, sslType) {
       <hr>
       </hr>
     </div>
-
-    <div class="TealBox">
+    <h2 class="TealGlow" v-if="!showSSlBoxState" @click.stop=setShowSSlBoxState(true)>View/Set Your SSL Location</h2>
+    <div>
+    </div>
+    <div v-if="showSSlBoxState" class="TealBox">
       <h3>Set Your SSL Location</h3>
       <div>
         <input value="prod" name="env" type="radio" @input="(e) => setSslEnvState(e.target.value)"/>
@@ -108,11 +114,12 @@ function handleInput(e, sslType) {
         <h3>ssl.key.location = {{sslLocInfoState[sslEnvState].ssl_key_location}}</h3>
         <h3>ssl.ca.location = {{sslLocInfoState[sslEnvState].ssl_ca_location}}</h3>
       </div>
-
       <hr>
       </hr>
       <div v-if="showUpdateBtnState">
         <button @click.stop="toggleUpdateSSL" style="margin:15px">Update</button>
+        <hr/>
+        <button @click.stop=setShowSSlBoxState(false)>Close</button>
       </div>
       <div v-if="showGetNewSSlState">
         <div class="PartsDiv">
@@ -125,7 +132,6 @@ function handleInput(e, sslType) {
             <label>ssl.key.location = </label>
             <input @input="(e) => handleInput(e, 'ssl_key_location')" type="text" />
           </div>
-
           <div>
             <label>ssl.ca.location = </label>
             <input @input="(e) => handleInput(e, 'ssl_ca_location')" type="text" />
@@ -135,14 +141,9 @@ function handleInput(e, sslType) {
         <br></br>
         <button @click.stop="toggleUpdateSSL" style="margin:15px">Cancel</button>
       </div>
-
     </div>
     <div class="Topics">
-      <hr>
-      </hr>
       <Topic v-for="topic in alphabatizedTopics" :topic-data={topic} :ssl-loc-info={sslLocInfoState} :key="topic.topicName"></Topic>
-      <hr>
-      </hr>
     </div>
   </div>
 </template>
@@ -174,4 +175,15 @@ function handleInput(e, sslType) {
   display: flex;
   justify-content: space-around;
 }
+
+.TealGlow {
+  margin: 10px;
+  padding: 15px;
+  border: solid 4px rgb(0, 128, 128);
+  &:hover {
+        box-shadow: inset 0px 0px 8px 
+        rgb(0, 128, 128), 0 0 15px rgb(0, 128, 128) ;
+    }
+}
+
 </style>

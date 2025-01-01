@@ -18,6 +18,9 @@ export default {
       producerConsumerState: "C",
       kCatString: "",
       sslString: `kcat -C -b ${this.topicData.topic.stageServer} -t ${this.topicData.topic.topicName}`,
+      certificate: "",
+      key: "",
+      ca: ""
     }
   },
   mounted() {
@@ -53,9 +56,12 @@ export default {
       let certificate = this.sslInfo[this.sslEnvState]["ssl_certificate_location"]
       let key = this.sslInfo[this.sslEnvState]["ssl_key_location"]
       let ca = this.sslInfo[this.sslEnvState]["ssl_ca_location"]
-      let topicString = ` -b ${this.serverSelectionState} -t ${this.topicName} -${this.producerConsumerState}`
-      let sslEnvString = `-X ssl.certificate.location=${certificate} -X ssl.key.location=${key} -X security.protocol=ssl -X ssl.ca.location=${ca} `
-      this.kCatString = `kcat ${sslEnvString} ${topicString}`
+      // let topicString = ` -b ${this.serverSelectionState} -t ${this.topicName} -${this.producerConsumerState}`
+      // let sslEnvString = `-X ssl.certificate.location=${certificate} -X ssl.key.location=${key} -X security.protocol=ssl -X ssl.ca.location=${ca} `
+      // this.kCatString = `kcat ${sslEnvString} ${topicString}`
+      this.certificate = this.sslInfo[this.sslEnvState]["ssl_certificate_location"]
+      this.key = this.sslInfo[this.sslEnvState]["ssl_key_location"]
+      this.ca = this.sslInfo[this.sslEnvState]["ssl_ca_location"]
     },
   }
 }
@@ -81,8 +87,8 @@ export default {
             <label>Consumer</label>
           </div>
           <hr/>
-          <h3>{{ this.kCatString }}</h3>
-          <!-- <p>-X ssl.certificate.location=myStageLoc -X ssl.key.location=myStageKey -X security.protocol=ssl -X ssl.ca.location=mystageSaLoc kcat -C -b terrificStageServer:9092 -t my-terrific-topic</p> -->
+          <!-- <h3>{{ this.kCatString }}</h3> -->
+          <h3>kcat -X security.protocol=ssl -X ssl.certificate.location=<span class="teal">{{ certificate }}</span> -X ssl.key.location=<span class="teal">{{ this.key }}</span> -X ssl.ca.location=<span class="teal">{{ this.ca }}</span> -b <span class="teal">{{ this.serverSelectionState }}</span> -t {{ this.topicName }} -<span class="orange">{{ this.producerConsumerState }}</span></h3>
         <br/>
             <button @click.stop="setIsDisplayedState(false)">Collapse</button>
         </div>
@@ -114,5 +120,17 @@ input {
 
 button {
   margin: 15px;
+}
+
+.teal {
+  color: rgb(0, 128, 128);
+}
+
+.orange {
+  color: orange;
+}
+
+.maroon {
+  color: maroon;
 }
 </style>
